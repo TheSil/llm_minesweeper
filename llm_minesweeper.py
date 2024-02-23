@@ -80,10 +80,15 @@ def check_win():
                 return False
     return True
 
+
+def flag_remaining_tiles():
+    for x in range(BOARD_SIZE):
+        for y in range(BOARD_SIZE):
+            if board[x][y] == -1:  # Unrevealed bomb
+                board[x][y] = -5  # Automatically flag it as a bomb
+
 # Create the board and place the bombs
 board = create_board()
-
-
 
 
 # Main game loop
@@ -115,7 +120,7 @@ while running:
                 else:
                     reveal_tile(x, y)
                     if check_win():
-                        # Handle win condition
+                        flag_remaining_tiles()  # Call this right after a win is detected
                         board_reset = True
             elif event.button == 3:  # Right mouse button
                 # Toggle flag state for unrevealed tiles and mines
