@@ -128,9 +128,13 @@ while running:
             elif board[x][y] == -4:  # Revealed mine (red)
                 pygame.draw.rect(screen, RED, rect)
             elif board[x][y] >= 0:  # Revealed tile
-                font = pygame.font.Font(None, 18)
-                text = font.render(str(board[x][y]), True, BLACK)
-                screen.blit(text, (x * TILE_SIZE, y * TILE_SIZE))
+                if board[x][y] > 0:  # Only draw numbers for tiles with a count greater than 0
+                    font = pygame.font.Font(None, 18)
+                    text = font.render(str(board[x][y]), True, BLACK)
+                    text_rect = text.get_rect(center=(x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2))
+                    screen.blit(text, text_rect)
+                else:
+                    pygame.draw.rect(screen, WHITE, rect)  # Draw an empty white tile for 0
 
     # Add a grid
     for i in range(1, BOARD_SIZE):
