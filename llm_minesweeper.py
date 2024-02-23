@@ -93,35 +93,41 @@ board = create_board()
 
 # Main game loop
 running=True
-board_reset = True
+board_reset = False  # The board doesn't need an immediate reset at the start
 waiting_for_reset = False
+reset_acknowledged = False  # New flag to acknowledge a reset without proceeding with a game action
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            if waiting_for_reset:
+                # Reset the game and acknowledge the reset
+                board = create_board()
+                waiting_for_reset = False
+                reset_acknowledged = True  # Acknowledge that we've just reset the game
+                continue  # Proceed to the next iteration to avoid this click being processed as game action
+
+            # Process the first click after a game reset properly
+            if reset_acknowledged:
+                reset_acknowledged = False  # Clear the flag to allow normal game actions
+                # Do NOT continue; let the logic below handle the click as a normal game action
+
             x, y = event.pos[0] // TILE_SIZE, event.pos[1] // TILE_SIZE
             if event.button == 1:  # Left mouse button
-                if waiting_for_reset:
-                    # Reset the game without revealing any tile
-                    board = create_board()
-                    waiting_for_reset = False
-                    board_reset = False  # Prepare for a new game
-                    continue  # Skip the rest of the loop to avoid revealing a tile
-                if board_reset:
-                    # If the game was over and is now reset, prepare the board
-                    board = create_board(x, y)
+                if board_reset and not board[x][
+                                           y] == -4:  # If the board was just reset and the click is not on a revealed bomb
+                    board = create_board(x,
+                                         y)  # Ensure this is your logic for initializing the board with the first click avoiding a bomb placement
                     board_reset = False
-                if board[x][y] == -1:  # If a bomb is clicked
-                    # Reveal all bombs and prepare for reset
-                    board = [[-4 if cell == -1 else cell for cell in row] for row in board]
-                    board_reset = True
+                elif board[x][y] == -1:  # If a bomb is clicked
+                    board[x][y] = -4  # Mark the bomb as revealed
                     waiting_for_reset = True  # Indicate that the next click should reset the game
                 else:
                     reveal_tile(x, y)
                     if check_win():
-                        flag_remaining_tiles()  # Call this right after a win is detected
-                        board_reset = True
+                        flag_remaining_tiles()  # Make sure this function correctly flags all bombs
+                        waiting_for_reset = True
             elif event.button == 3:  # Right mouse button
                 # Toggle flag state for unrevealed tiles and mines
                 if board[x][y] == -2:  # Unrevealed safe tile
