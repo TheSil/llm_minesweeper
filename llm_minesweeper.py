@@ -4,6 +4,9 @@ import random
 # Initialize Pygame
 pygame.init()
 
+# Set the window title
+pygame.display.set_caption("LLM Minesweeper")
+
 # Set up some constants
 WIDTH, HEIGHT = 400, 400
 TILE_SIZE = 20
