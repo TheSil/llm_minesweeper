@@ -151,6 +151,8 @@ while running:
                 pygame.draw.rect(screen, LIGHT_ORANGE, rect)
             elif board[x][y] == FieldState.REVEALED_MINE:
                 pygame.draw.rect(screen, RED, rect)
+                pygame.draw.circle(screen, BLACK, (x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2),
+                                   TILE_SIZE // 2 - 2)
             elif isinstance(board[x][y], int):
                 if board[x][y] > 0:
                     font = pygame.font.Font(None, 18)
