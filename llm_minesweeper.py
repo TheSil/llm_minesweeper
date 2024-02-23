@@ -19,7 +19,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GRAY = (128, 128, 128)
-BLUE = (0, 0, 255)
+LIGHT_ORANGE = (255, 165, 0)  # RGB value for a light orange color
 
 # Number to color mapping
 NUMBER_COLORS = {
@@ -144,7 +144,7 @@ while running:
             if board[x][y] in [FieldState.UNREVEALED_SAFE, FieldState.UNREVEALED_MINE]:
                 pygame.draw.rect(screen, GRAY, rect)
             elif board[x][y] in [FieldState.FLAGGED_SAFE, FieldState.FLAGGED_MINE]:
-                pygame.draw.rect(screen, BLUE, rect)
+                pygame.draw.rect(screen, LIGHT_ORANGE, rect)
             elif board[x][y] == FieldState.REVEALED_MINE:
                 pygame.draw.rect(screen, RED, rect)
             elif isinstance(board[x][y], int):
