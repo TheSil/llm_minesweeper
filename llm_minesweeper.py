@@ -20,6 +20,18 @@ RED = (255, 0, 0)
 GRAY = (128, 128, 128)
 BLUE = (0, 0, 255)
 
+# Number to color mapping
+NUMBER_COLORS = {
+    1: (0, 0, 255),        # Blue
+    2: (0, 128, 0),        # Green
+    3: (255, 0, 0),        # Red
+    4: (0, 0, 128),        # Dark Blue
+    5: (128, 0, 0),        # Maroon
+    6: (64, 224, 208),     # Turquoise
+    7: (0, 0, 0),          # Black
+    8: (128, 128, 128)     # Gray
+}
+
 # Create the screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -131,9 +143,11 @@ while running:
             elif board[x][y] == -4:  # Revealed mine (red)
                 pygame.draw.rect(screen, RED, rect)
             elif board[x][y] >= 0:  # Revealed tile
-                if board[x][y] > 0:  # Only draw numbers for tiles with a count greater than 0
+                if board[x][y] > 0:
                     font = pygame.font.Font(None, 18)
-                    text = font.render(str(board[x][y]), True, BLACK)
+                    # Get the color for the number, default to BLACK if not found
+                    text_color = NUMBER_COLORS.get(board[x][y], BLACK)
+                    text = font.render(str(board[x][y]), True, text_color)
                     text_rect = text.get_rect(center=(x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2))
                     screen.blit(text, text_rect)
                 else:
