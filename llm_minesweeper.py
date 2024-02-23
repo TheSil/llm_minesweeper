@@ -12,7 +12,7 @@ pygame.display.set_caption("LLM Minesweeper")
 WIDTH, HEIGHT = 400, 400
 TILE_SIZE = 20
 BOARD_SIZE = WIDTH // TILE_SIZE
-BOMB_COUNT = 10
+BOMB_COUNT = 40
 
 # Set up some colors
 WHITE = (255, 255, 255)
