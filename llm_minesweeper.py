@@ -63,16 +63,19 @@ def count_neighboring_bombs(x, y):
                 count += 1
     return count
 
+def reveal_all_mines():
+    for x in range(BOARD_SIZE):
+        for y in range(BOARD_SIZE):
+            if board[x][y] in [FieldState.UNREVEALED_MINE, FieldState.FLAGGED_MINE]:
+                board[x][y] = FieldState.REVEALED_MINE
+
 def reveal_tile(x, y):
     if board[x][y] in [FieldState.UNREVEALED_MINE, FieldState.FLAGGED_MINE]:
         return
     if board[x][y] in [FieldState.FLAGGED_SAFE] or (isinstance(board[x][y], int) and board[x][y] >= 0):
         return
     reveal = count_neighboring_bombs(x, y)
-    if board[x][y] == FieldState.FLAGGED_MINE:
-        board[x][y] = FieldState.FLAGGED_MINE
-    else:
-        board[x][y] = reveal
+    board[x][y] = reveal
     if reveal == 0:
         for i in range(max(x - 1, 0), min(x + 2, BOARD_SIZE)):
             for j in range(max(y - 1, 0), min(y + 2, BOARD_SIZE)):
@@ -120,6 +123,7 @@ while running:
                     board_reset = False
                 elif board[x][y] == FieldState.UNREVEALED_MINE:
                     board[x][y] = FieldState.REVEALED_MINE
+                    reveal_all_mines()
                     waiting_for_reset = True
                 else:
                     reveal_tile(x, y)
